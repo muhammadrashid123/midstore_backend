@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     # Second party apps
     ###################
     "authentication",
+    "customer_management",
+    "seller_management",
+
     ###################
     # Second party apps
     # Second party apps
@@ -86,6 +89,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'midstore_backend.wsgi.application'
 
+# User Model
+AUTH_USER_MODEL = "customer_management.User"
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
