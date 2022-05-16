@@ -5,11 +5,10 @@ Helper logic facilitating UserProfileController is contained here
 
 """
 
+from user_profile.models import User, UserType
 
-from .models import SellerProfile
 
-
-class SellerProfileHelper:
+class UserProfileHelper:
     """Helper class for the UserProfileController"""
 
     def validate_phone_number(self, phone_number):
@@ -37,8 +36,7 @@ class SellerProfileHelper:
 
         return True
 
-
-    def validate_update_seller_payload(self, user, payload):
+    def validate_update_user_payload(self, user, payload):
         """Validate the payload form data to check for correct values
 
         Args:
@@ -56,25 +54,23 @@ class SellerProfileHelper:
 
                 # User is trying to set a phone number that is already
                 # used by some other user
-                if SellerProfile.objects.filter(contact_number=payload["contact_number"]).first():
+                if User.objects.filter(contact_number=payload["contact_number"]).first():
                     return 115
 
                 # Validate length and characters of phone number
                 status = self.validate_phone_number(
                     payload.get("contact_number")
                 )
-                if type(status).__name__ == "int": # Return if error code
+                if type(status).__name__ == "int":  # Return if error code
                     return status
 
             # Validate user type for supported types in UserType
-            # if "user_type" in payload and \
-            #     int(payload.get("user_type")) not in list(UserType.objects.all().values_list("id", flat=True)):
-            #     return 101
+            if "user_type" in payload and \
+                    int(payload.get("user_type")) not in list(UserType.objects.all().values_list("id", flat=True)):
+                return 101
 
             return True
 
         except Exception as ex:
             print(ex)
             return 1002
-
-
