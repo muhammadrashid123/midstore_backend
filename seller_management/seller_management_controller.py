@@ -72,9 +72,10 @@ class UserProfileController:
              
             shop = Shop.objects.create(
                 # user=User.objects.get("guid"))
-            user=User.objects.get(contact_number=payload.get("contact_number")))
+            user=User.objects.get(uuid=payload.get("uuid"))
+            ) 
 
-            serialized=ShopProfileReadSerializer(shop)
+            serialized=ShopWriteSerializer(shop)
 
             return create_response(create_message([serialized.data],430),201)
 
