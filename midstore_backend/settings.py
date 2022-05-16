@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%=!@zqj@_qh@7w=!jzb(=+r7waheg_ny@e0+t_x7y%d6z5l3)3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     "authentication",
     "customer_management",
     "seller_management",
+    "user_profile",
+    "common",
 
     ###################
     # Second party apps
@@ -55,7 +57,7 @@ INSTALLED_APPS = [
     ###################
 
     # Third pary apps
-    "rest_framework"
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -90,7 +92,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'midstore_backend.wsgi.application'
 
 # User Model
-AUTH_USER_MODEL = "customer_management.User"
+AUTH_USER_MODEL = "user_profile.User"
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -144,6 +146,12 @@ USE_I18N = True
 
 USE_TZ = True
 
+# Locale configuration for server response message e.g. en, ar, fr etc
+MSG_LOCALE = "en"
+
+# Media urls
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

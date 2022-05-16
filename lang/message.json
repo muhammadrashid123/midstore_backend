@@ -1,0 +1,87 @@
+{
+    "_comment": "Contains all server response messages against MSG_LOCALE configured in settings",
+
+    "1000": {
+        "msg": {
+            "en": "Successful",
+            "ar": ""
+        }
+    },
+
+    "1001": {
+        "msg": {
+            "en": "Unsuccessful",
+            "ar": ""
+        }
+    },
+
+    "1002": {
+        "msg": {
+            "en": "Something went wrong",
+            "ar": ""
+        }
+    },
+
+    "100": {
+        "msg": {
+            "en": "Mandatory keys not provided",
+            "ar": ""
+        }
+    },
+
+    "101": {
+        "msg": {
+            "en": "user_type not supported",
+            "ar": ""
+        }
+    },
+
+    "102": {
+        "msg": {
+            "en": "Request payload field error",
+            "ar": ""
+        }
+    },
+
+    "103": {
+        "msg": {
+            "en": "Shop Profile created successfully",
+            "ar": ""
+        }
+    },
+
+    "104": {
+        "msg": {
+            "en": "User not found",
+            "ar": ""
+        }
+    },
+
+    "105": {
+        "msg": {
+            "en": "Email is required",
+            "ar": ""
+        }
+    },
+
+    "106": {
+        "msg": {
+            "en": "Phone number length must be 13 digits",
+            "ar": ""
+        }
+    },
+
+    "107": {
+        "msg": {
+            "en": "Phone number can only contain digits",
+            "ar": ""
+        }
+    },
+
+    "108": {
+        "msg": {
+            "en": "User Profile created successfully",
+            "ar": ""
+        }
+    }
+}
