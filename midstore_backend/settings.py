@@ -107,11 +107,13 @@ AUTH_USER_MODEL = "user_profile.User"
 DATABASES = {
    'default': {
       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+      # 'OPTIONS': {"options": "-c search_path=public"},
       'NAME': 'midstore',
       'USER': 'admin',
       'PASSWORD': 'admin',
       'HOST': 'localhost',
-      'PORT': '5433', #port changed from 5432
+      'PORT': '5432',
+      'CONN_MAX_AGE': 30,
    }
 }
 
