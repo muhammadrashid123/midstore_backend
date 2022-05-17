@@ -83,5 +83,19 @@
             "en": "User Profile created successfully",
             "ar": ""
         }
+    },
+
+    "302": {
+        "msg": {
+            "en": "Shop not found",
+            "ar": ""
+        }
+    },
+ 
+    "309": {
+        "msg": {
+            "en": "User Deleted Successfully",
+            "ar": ""
+        }
     }
 }

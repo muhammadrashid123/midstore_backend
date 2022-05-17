@@ -4,7 +4,8 @@ Controller class for the Seller Management app
 All business logic related to seller management is contained here
 
 """
-from seller_management.serializers import ShopWriteSerializer, ShopProfileReadSerializer
+from seller_management.models import Shop
+from seller_management.serializers import ShopWriteSerializer, ShopReadSerializer
 from utils.response_utils import create_response, create_message
 
 
@@ -48,12 +49,34 @@ class ShopController:
             else:  # There were errors while serializing the payload
                 return create_response(create_message([serialized.errors], 102), 400)
 
-            serialized = ShopProfileReadSerializer(shop_obj)
+            serialized = ShopReadSerializer(shop_obj)
 
             return create_response(create_message([serialized.data], 103), 201)
 
         except Exception as ex:
             print(ex)
             return create_response(create_message([str(ex)], 1002), 500)
+
+    def get_shop(self, request):
+        """Get details of a shop"""
+        try:
+
+            payload=request.data.copy()
+            shop = Shop.objects.filter(
+                shop_name=payload.get("name")
+            ).first()
+
+            if not shop:
+                return create_response(create_message([], 302), 404)
+
+            serialized = ShopReadSerializer(shop)
+
+            return create_response(create_message([serialized.data], 1000), 200)
+
+
+        except Exception as ex:
+            print(ex)
+            return create_response(create_message([str(ex)], 1002), 500)
+
 
 

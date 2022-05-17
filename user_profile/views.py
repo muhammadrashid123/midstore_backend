@@ -3,6 +3,7 @@ All views related to the user profile app
 
 """
 
+from requests import delete
 from rest_framework.views import APIView
 from user_profile.user_controller import UserProfileController
 
@@ -16,3 +17,18 @@ class UserProfileView(APIView):
         """Create new User"""
 
         return self.user_controller_obj.create_user(request)
+
+    def patch(self, request):
+        """Update a User"""
+
+        return self.user_controller_obj.update_user_profile(request)
+
+    def get(self, request):
+        """Get details of a User"""
+
+        return self.user_controller_obj.get_user_details(request)
+
+    def delete(self,request):
+        """Delete existing User"""
+
+        return self.user_controller_obj.delete_user(request)

@@ -16,8 +16,8 @@ class ShopWriteSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class ShopProfileReadSerializer(ModelSerializer):
-    """Read serializer for the shop, used where shop profile needs to be serialized"""
+class ShopReadSerializer(ModelSerializer):
+    """Read serializer for the shop, used where shop needs to be serialized"""
 
     uuid = SerializerMethodField()
 
