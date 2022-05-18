@@ -35,11 +35,11 @@ class User(AbstractUser):
     # User identifier
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=50, null=True, blank=True)
-    email = EmailField(unique=True, null=True, blank=True)
+    email = EmailField(unique=True, null=True)
     name = models.CharField(max_length=150, null=True, blank=True)
 
     address = models.TextField()
-    contact_number = models.CharField(unique=True, max_length=20, null=False, blank=False)  # required
+    contact_number = models.CharField(unique=True, max_length=200, null=False, blank=False)  # required
     gender = models.CharField(max_length=50, null=True, blank=True)
 
     image = models.ImageField(upload_to="user_profile_images", null=True)

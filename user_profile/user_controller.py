@@ -5,13 +5,18 @@ All business logic related to user management is contained here
 
 """
 import uuid
-from user_profile.models import User,UserType
+
+from django.db.models import Q
+
+from user_profile.models import User, UserType
 from user_profile.serializers import (UserProfileReadSerializer,
                                       UserProfileWriteSerializer)
 from user_profile.user_helper import UserProfileHelper
+from utils.request_utils import get_query_param_or_default
 from utils.response_utils import create_message, create_response
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
+
 
 class UserProfileController:
     """Controller for the business logic of user profile app"""
@@ -69,52 +74,23 @@ class UserProfileController:
             print(ex)
             return create_response(create_message([str(ex)], 1002), 500)
 
-
     def update_user_profile(self, request):
         """ Updating User """
         try:
+            # contact_number is mandatory in query params
+            if not get_query_param_or_default(request, "contact_number", None):
+                return create_response(create_message([], 105), 400)
+
             # Get mutable copy of request payload
             payload = request.data.copy()
-            email=payload.get("email")
 
-            if not email:
-                mandatory_keys=[
-                    "contact_number"
-                ]
-                # Check if all mandatory keys exist in the request payload
-                if not all(key in list(payload.keys()) for key in mandatory_keys):
-                    return create_response(create_message(mandatory_keys, 100), 400)
+            user = User.objects.filter(
+                contact_number=get_query_param_or_default(request, "contact_number", None)).first()
 
-            # Email is mandatory in form data
-            # if not payload.get("email", None):
-            #     return create_response(create_message([], 105), 400)
-
-                user = User.objects.filter(
-                    contact_number=payload.get("contact_number", None)
-                ).first()
-
-                # If user does not exist
-                #if not user and user.status == 0:
-                if not user:
-                    return create_response(create_message([], 104), 404)
-
-            else:
-                mandatory_keys=[
-                    "email"
-                ]
-
-                # Check if all mandatory keys exist in the request payload
-                if not all(key in list(payload.keys()) for key in mandatory_keys):
-                    return create_response(create_message(mandatory_keys, 100), 400)
-
-                user = User.objects.filter(
-                    email=payload.get("email", None)
-                ).first()
-
-                # If user does not exist
-                #if not user and user.status_id == 0:
-                if not user:
-                    return create_response(create_message([], 104), 404)
+            # If user does not exist
+            # if not user and user.status == 0:
+            if not user:
+                return create_response(create_message([], 104), 404)
 
 
             # contact number cannot be updated
@@ -136,57 +112,30 @@ class UserProfileController:
             serialized = UserProfileWriteSerializer(data=payload, partial=True)
 
             if serialized.is_valid():
-
                 with transaction.atomic():
                     serialized.update(user, serialized.validated_data)
             read_serialized = UserProfileReadSerializer(user)
 
-            return create_response(create_message(read_serialized.data, 108), 200)
+            return create_response(create_message(read_serialized.data, 109), 200)
 
         except Exception as ex:
             print(ex)
             return create_response(create_message([str(ex)], 1002), 500)
-            
+
     def get_user_details(self, request):
         """ Getting details of user """
         try:
-            payload=request.data.copy()
-            email=payload.get("email")
-            contact_number=payload.get("contact_number")
-            #user get using contact number
-            if not email:
-                mandatory_keys = [
-                "contact_number"
-                ]
+            # contact_number is mandatory in query params
+            if not get_query_param_or_default(request, "contact_number", None):
+                return create_response(create_message([], 105), 400)
 
-                # Check if all mandatory keys exist in the request payload
-                if not all(key in list(payload.keys()) for key in mandatory_keys):
-                    return create_response(create_message(mandatory_keys, 100), 400)
+            user_obj = User.objects.filter(contact_number=get_query_param_or_default(request, "contact_number", None)).first()
 
-                user = User.objects.filter(
-                contact_number=payload.get("contact_number")).first()
+            # If user does not exist
+            if not user_obj:
+                return create_response(create_message([], 104), 404)
 
-                # If user does not exist
-                if not user:
-                    return create_response(create_message([], 104), 404)
-
-            else:
-                #user get using email
-                mandatory_keys = [
-                "email"
-            ]
-
-            # Check if all mandatory keys exist in the request payload
-                if not all(key in list(payload.keys()) for key in mandatory_keys):
-                    return create_response(create_message(mandatory_keys, 100), 400)
-                user = User.objects.filter(
-                email=payload.get("email")).first()
-
-                # If user does not exist
-                if not user:
-                    return create_response(create_message([], 104), 404)
-
-            serialized = UserProfileReadSerializer(user)
+            serialized = UserProfileReadSerializer(user_obj)
 
             return create_response(create_message([serialized.data], 1000), 200)
 
@@ -194,60 +143,33 @@ class UserProfileController:
             print(ex)
             return create_response(create_message([str(ex)], 1002), 500)
 
-
-
     def delete_user(self, request):
         """" Deleting the User """
         try:
-            payload=request.data.copy()
-            email=payload.get("email")
 
-            # delete using contact number
-            if not email:
-                mandatory_keys=[
-                    "contact_number"
-                ]
-                # Check if all mandatory keys exist in the request payload
-                if not all(key in list(payload.keys()) for key in mandatory_keys):
-                    return create_response(create_message(mandatory_keys, 100), 400)
+            if not get_query_param_or_default(request, "contact_number", None):
+                return create_response(create_message([], 105), 400)
 
-                user = User.objects.filter(
-                    contact_number=payload.get("contact_number",None)
-                ).first()
+            user_obj = User.objects.filter(
+                contact_number=get_query_param_or_default(request, "contact_number", None)).first()
 
-                # If user does not exist
-                if not user:
-                    return create_response(create_message([], 104), 404)
-            else:
-                #delete using email
-                mandatory_keys=[
-                    "email"
-                ]
-                # Check if all mandatory keys exist in the request payload
-                if not all(key in list(payload.keys()) for key in mandatory_keys):
-                    return create_response(create_message(mandatory_keys, 100), 400)
+            # If user does not exist
+            if not user_obj:
+                return create_response(create_message([], 104), 404)
 
-                user = User.objects.filter(
-                    email=payload.get("email",None)
-                ).first()
-
-                # If user does not exist
-                if not user:
-                    return create_response(create_message([], 104), 404)
             # Set user status to deleted
-            user.status_id = 0
+            user_obj.status_id = 0
 
-            # append deleted and uuid at the end of email so the email
-            # can be used again for user creation
-            # user.email = user.email + "deleted" + str(uuid.uuid4())
-            user.contact_number = user.contact_number + "deleted" + str(uuid.uuid4())
-            # user.username = user.username + "deleted" + str(uuid.uuid4())
+            # append deleted and uuid at the end of email, contact number and username so the email ,contact number and
+            # username can be used again for user creation
+            user_obj.email = str(user_obj.email) + "deleted" + str(uuid.uuid4())
+            user_obj.contact_number = str(user_obj.contact_number) + "deleted" + str(uuid.uuid4())
+            user_obj.username = str(user_obj.username) + "deleted" + str(uuid.uuid4())
 
-            user.save()
+            user_obj.save()
 
             return create_response(create_message([], 309), 200)
 
         except Exception as ex:
             print(ex)
             return create_response(create_message([str(ex)], 1002), 500)
-

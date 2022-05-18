@@ -3,7 +3,6 @@ All views related to the user profile app
 
 """
 
-from requests import delete
 from rest_framework.views import APIView
 from user_profile.user_controller import UserProfileController
 

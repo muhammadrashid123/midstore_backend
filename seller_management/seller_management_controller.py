@@ -6,6 +6,7 @@ All business logic related to seller management is contained here
 """
 from seller_management.models import Shop
 from seller_management.serializers import ShopWriteSerializer, ShopReadSerializer
+from utils.request_utils import get_query_param_or_default
 from utils.response_utils import create_response, create_message
 
 
@@ -61,22 +62,17 @@ class ShopController:
         """Get details of a shop"""
         try:
 
-            payload=request.data.copy()
-            shop = Shop.objects.filter(
-                shop_name=payload.get("name")
-            ).first()
-
-            if not shop:
+            # uuid is mandatory in query params
+            if not get_query_param_or_default(request, "uuid", None):
+                return create_response(create_message([], 110), 400)
+            shop_obj = Shop.objects.first(uuid=get_query_param_or_default(request, "uuid", None)).first()
+            if not shop_obj:
                 return create_response(create_message([], 302), 404)
 
-            serialized = ShopReadSerializer(shop)
+            serialized = ShopReadSerializer(shop_obj, many=True)
 
             return create_response(create_message([serialized.data], 1000), 200)
-
 
         except Exception as ex:
             print(ex)
             return create_response(create_message([str(ex)], 1002), 500)
-
-
-

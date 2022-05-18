@@ -59,7 +59,7 @@
 
     "105": {
         "msg": {
-            "en": "Email is required",
+            "en": "Contact number is required",
             "ar": ""
         }
     },
@@ -81,6 +81,18 @@
     "108": {
         "msg": {
             "en": "User Profile created successfully",
+            "ar": ""
+        }
+    },
+    "109": {
+        "msg": {
+            "en": "User Profile update successfully",
+            "ar": ""
+        }
+    },
+    "110": {
+        "msg": {
+            "en": "uuid is required",
             "ar": ""
         }
     },
