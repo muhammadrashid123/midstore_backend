@@ -17,6 +17,8 @@ from utils.response_utils import create_message, create_response
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
 
+import logging
+import traceback
 
 class UserProfileController:
     """Controller for the business logic of user profile app"""
@@ -71,7 +73,8 @@ class UserProfileController:
             return create_response(create_message([serialized.data], 108), 201)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
     def update_user_profile(self, request):
@@ -119,7 +122,8 @@ class UserProfileController:
             return create_response(create_message(read_serialized.data, 109), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
     def get_user_details(self, request):
@@ -140,7 +144,8 @@ class UserProfileController:
             return create_response(create_message([serialized.data], 1000), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
     def delete_user(self, request):
@@ -171,5 +176,6 @@ class UserProfileController:
             return create_response(create_message([], 309), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)

@@ -59,18 +59,18 @@ INSTALLED_APPS = [
     ###################
 
     # Third pary apps
-    'rest_framework',
-    'django_filters'
+    'rest_framework'
+    # 'django_filters'
 ]
 
 
 
-REST_FRAMEWORK = {
+# REST_FRAMEWORK = {
 
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ],
-}
+#     'DEFAULT_FILTER_BACKENDS': [
+#         'django_filters.rest_framework.DjangoFilterBackend',
+#     ],
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

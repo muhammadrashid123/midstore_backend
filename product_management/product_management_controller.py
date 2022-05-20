@@ -8,7 +8,7 @@ import uuid
 
 from django.http import request
 from product_management.models import Category
-from product_management.serializers import CategoryReadSerializer, CategoryWriteSerializer
+from product_management.serializers import CategoryReadSerializer, CategoryWriteSerializer, CategoryProductsReadSerializer
 from rest_framework import serializers
 from utils.response_utils import create_message, create_response
 from utils.request_utils import get_query_param_or_default
@@ -16,6 +16,8 @@ from django.db import transaction
 from product_management.serializers import (ProductsWriteSerializer,ProductsReadSerializer)
 from product_management.models import Products
 
+import logging
+import traceback
 
 class CategoryController:
     """Controller class for products category management"""
@@ -49,10 +51,11 @@ class CategoryController:
 
             serialized = CategoryReadSerializer(category)
 
-            return create_response(create_message([serialized.data],450), 201)
+            return create_response(create_message([serialized.data],313), 201)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
 
@@ -63,28 +66,42 @@ class CategoryController:
         try:
             payload=request.data.copy()
             # if get single product
-            if  payload.get("uuid",None):
-                category=Category.objects.filter(uuid=payload.get("uuid",None)).first()
+            if  get_query_param_or_default(request,"uuid",None):
+                category=Category.objects.filter(uuid=get_query_param_or_default(request,"uuid",None)).first()
 
                 if not category:
-                    return create_response(create_message([], 452), 404)
+                    return create_response(create_message([], 314), 404)
 
-                serialized = CategoryReadSerializer(category)
+                category_serialized = CategoryReadSerializer(category)
+                product_obj =  Products.objects.filter(category=get_query_param_or_default(request, 'uuid', None)).all()
+                
+                serialized = CategoryProductsReadSerializer(product_obj, many=True)
 
-                return create_response(create_message([serialized.data], 1000), 200)
+                data = {
+                'uuid': category_serialized.data['uuid'],
+                'title': category_serialized.data['title'],
+                'image': category_serialized.data['image'],
+                'created_at': category_serialized.data['created_at'],
+                'updated_at': category_serialized.data['updated_at'],
+                'parent_category_uuid': category_serialized.data['parent_category_uuid'],
+                'products_list': serialized.data
+             }
+
+                return create_response(create_message(data, 1000), 200)
             else:
-                #if show all  products
+                # if show all  product categories
                 category =Category.objects.all().order_by("created_at")
 
                 if not category:
-                     return create_response(create_message([], 452), 404)
+                     return create_response(create_message([], 314), 404)
 
                 serialized = CategoryReadSerializer(category,many=True)
 
                 return create_response(create_message([serialized.data], 1000), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
 
@@ -92,13 +109,8 @@ class CategoryController:
     def update_category(self,request):
         """Update product category information"""
         try:
-
             # Get mutable copy of request payload
             payload=request.data.copy()
-            # uuid is mandatory in form data
-            # if not payload.get("uuid",None):
-            #     return create_response(create_message([], 100),400)
-
             # contact_number is mandatory in query params
             if not get_query_param_or_default(request, "uuid", None):
                 return create_response(create_message([], 105), 400)
@@ -106,7 +118,7 @@ class CategoryController:
             category=Category.objects.filter(uuid=get_query_param_or_default(request, "uuid",None)).first()
             # If category does not exist
             if not category:
-                return create_response(create_message([],452),404)
+                return create_response(create_message([],314),404)
             # uuid cannot be updated
             payload.pop("uuid",None)
 
@@ -119,10 +131,11 @@ class CategoryController:
                     serialized.update(category, serialized.validated_data)
                     read_serialized = CategoryReadSerializer(category)
 
-            return create_response(create_message(read_serialized.data, 453), 200)
+            return create_response(create_message(read_serialized.data, 315), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)],1002),500)
 
 
@@ -132,9 +145,9 @@ class CategoryController:
 
         try:
 
-            # guid is mandatory in query params
+            # uuid is mandatory in query params
             if not get_query_param_or_default(request, "uuid", None):
-                return create_response(create_message([], 454), 400)
+                return create_response(create_message([], 316), 400)
 
             category = Category.objects.filter(
                 uuid=get_query_param_or_default(request, "uuid", None)
@@ -142,14 +155,15 @@ class CategoryController:
 
             # If product category does not exist
             if not category:
-                return create_response(create_message([], 452), 404)
+                return create_response(create_message([], 314), 404)
 
             category.delete()
 
             return create_response(create_message([], 1000), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
 class ProductsController:
@@ -185,10 +199,11 @@ class ProductsController:
 
             serialized = ProductsReadSerializer(product)
 
-            return create_response(create_message([serialized.data],432), 201)
+            return create_response(create_message([serialized.data],310), 201)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
 
@@ -202,12 +217,12 @@ class ProductsController:
             payload=request.data.copy()
 
             # if get single product
-            if  payload.get("uuid",None):
+            if  get_query_param_or_default(request,"uuid",None):
 
-                product=Products.objects.filter(guid=payload.get("uuid",None)).first()
+                product=Products.objects.filter(uuid=get_query_param_or_default(request,"uuid",None)).first()
 
                 if not product:
-                    return create_response(create_message([], 433), 404) #product not found
+                    return create_response(create_message([], 311), 404) #product not found
 
                 serialized = ProductsReadSerializer(product)
 
@@ -217,14 +232,15 @@ class ProductsController:
 
 
             if not products:
-                return create_response(create_message([], 433), 404)
+                return create_response(create_message([], 311), 404)
 
             serialized = ProductsReadSerializer(products,many=True)
 
             return create_response(create_message([serialized.data], 1000), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
 
@@ -236,14 +252,14 @@ class ProductsController:
             # Get mutable copy of request payload
             payload=request.data.copy()
 
-            # guid is mandatory in form data
-            if not payload.get("uuid",None):
-                return create_response(create_message([], 100),400)
+            # uuid is mandatory in form data
+            if not get_query_param_or_default(request, "uuid",None):
+                return create_response(create_message([], 317),400)
 
-            product=Products.objects.filter(uuid=payload.get("uuid",None)).first()
-            # If guid does not exist
+            product=Products.objects.filter(uuid=get_query_param_or_default(request,"uuid",None)).first()
+            # If uuid does not exist
             if not product:
-                return create_response(create_message([],433),404)
+                return create_response(create_message([],311),404)
             # guid cannot be updated
             payload.pop("uuid",None)
 
@@ -256,10 +272,11 @@ class ProductsController:
                     serialized.update(product, serialized.validated_data)
                     read_serialized = ProductsReadSerializer(product)
 
-            return create_response(create_message(read_serialized.data, 441), 200)
+            return create_response(create_message(read_serialized.data, 312), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)],1002),500)
 
 
@@ -269,24 +286,25 @@ class ProductsController:
 
         try:
 
-            # guid is mandatory in query params
+            # uuid is mandatory in query params
             if not get_query_param_or_default(request, "uuid", None):
-                return create_response(create_message([], 440), 400)
+                return create_response(create_message([], 317), 400)
 
             product = Products.objects.filter(
-                guid=get_query_param_or_default(request, "uuid", None)
+                uuid=get_query_param_or_default(request, "uuid", None)
             ).first()
 
             # If product does not exist
             if not product:
-                return create_response(create_message([], 433), 404)
+                return create_response(create_message([], 311), 404)
 
             product.delete()
 
             return create_response(create_message([], 1000), 200)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
 

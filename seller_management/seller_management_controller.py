@@ -60,7 +60,8 @@ class ShopController:
             return create_response(create_message([serialized.data], 103), 201)
 
         except Exception as ex:
-            print(ex)
+            logging.exception(str(ex))
+            traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
     def get_shop(self, request):
