@@ -47,8 +47,10 @@ INSTALLED_APPS = [
     "authentication",
     "customer_management",
     "seller_management",
+    "product_management",
     "user_profile",
     "common",
+
 
     ###################
     # Second party apps
@@ -112,7 +114,7 @@ DATABASES = {
       'USER': 'admin',
       'PASSWORD': 'admin',
       'HOST': 'localhost',
-      'PORT': '5432',
+      'PORT': '5433', # changed port to 5433 from 5432
       'CONN_MAX_AGE': 30,
    }
 }
