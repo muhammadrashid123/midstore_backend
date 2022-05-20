@@ -57,8 +57,18 @@ INSTALLED_APPS = [
     ###################
 
     # Third pary apps
-    'rest_framework'
+    'rest_framework',
+    'django_filters'
 ]
+
+
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -107,7 +117,7 @@ AUTH_USER_MODEL = "user_profile.User"
 DATABASES = {
    'default': {
       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-      # 'OPTIONS': {"options": "-c search_path=public"},
+      'OPTIONS': {"options": "-c search_path=public"},
       'NAME': 'midstore',
       'USER': 'admin',
       'PASSWORD': 'admin',
