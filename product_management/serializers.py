@@ -47,3 +47,9 @@ class ProductsReadSerializer(ModelSerializer):
     class Meta:
         model=Products
         fields="__all__"
+
+class CategoryProductsReadSerializer(ModelSerializer):
+    """Read serializer for the category products profile, used where products needs to be serialized"""
+    class Meta:
+        model = Products
+        exclude = ('category', )

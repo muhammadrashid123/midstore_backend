@@ -110,54 +110,54 @@
             "ar": ""
         }
     },
-    "432": {
+    "310": {
         "msg": {
             "en": "Product created successfully",
             "ar": ""
         }
     },
 
-    "433": {
+    "311": {
         "msg": {
             "en": "Products not found",
             "ar": ""
         }
     },
     
-    "441": {
+    "312": {
         "msg": {
             "en": "Products Update  successfully",
             "ar": ""
         }
     },
 
-    "449": {
-        "msg": {
-            "en": "There is no more product available",
-            "ar": ""
-        }
-    },
-    "450": {
+    "313": {
         "msg": {
             "en": "Product Category add Successfully",
             "ar": ""
         }
     },
-    "452": {
+    "314": {
         "msg": {
             "en": "Category not found",
             "ar": ""
         }
     },
-    "453": {
+    "315": {
         "msg": {
             "en": "Product Category Update Successfully",
             "ar": ""
         }
     },
-    "454": {
+    "316": {
         "msg": {
-            "en": "Products id required ",
+            "en": "Category id required ",
+            "ar": ""
+        }
+    },
+    "317": {
+        "msg": {
+            "en": "Product id required ",
             "ar": ""
         }
     }
