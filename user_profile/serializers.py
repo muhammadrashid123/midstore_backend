@@ -20,17 +20,17 @@ class UserProfileWriteSerializer(ModelSerializer):
 class UserProfileReadSerializer(ModelSerializer):
     """Read serializer for the user profile, used where user profile needs to be serialized"""
 
-    uuid = SerializerMethodField()
+    # uuid = SerializerMethodField()
+    #
+    # shop = SerializerMethodField()
 
-    shop = SerializerMethodField()
-
-    def get_uuid(self, obj):
-        if obj.uuid:
-            return str(obj.uuid)
-
-    def get_shop(self, obj):
-        if obj.shop:
-            return str(obj.shop.uuid)
+    # def get_uuid(self, obj):
+    #     if obj.uuid:
+    #         return str(obj.uuid)
+    #
+    # def get_shop(self, obj):
+    #     if obj.shop:
+    #         return str(obj.shop.uuid)
 
     class Meta:
         model = User

@@ -124,8 +124,8 @@ DATABASES = {
       'USER': 'admin',
       'PASSWORD': 'admin',
       'HOST': 'localhost',
-      'PORT': '5433', # changed port to 5433 from 5432
-      'CONN_MAX_AGE': 30,
+      'PORT': '5432',
+      'CONN_MAX_AGE': 600,
    }
 }
 

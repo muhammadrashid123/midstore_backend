@@ -30,7 +30,7 @@ class Products(models.Model):
     title=models.CharField(max_length=100,null=False,blank=False)
     image=models.ImageField(upload_to="products_images")
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    available_products = models.PositiveIntegerField(default=0) # stock
+    stock = models.PositiveIntegerField(default=0) # stock
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
