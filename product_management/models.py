@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 from django.db import models
 
 # Create your models here.
@@ -47,3 +48,31 @@ class Products(models.Model):
                                                               self.brand_name,
                                                               self.created_at,
                                                               self.updated_at)
+=======
+from unicodedata import category
+from django.db import models
+import uuid
+
+from matplotlib import image
+# Create your models here.
+
+# Product Category -> Image & Name
+class Category(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=200, null=False, blank=False)
+    image = models.ImageField(upload_to='category_images', null=True)
+
+# Product -> Name, Price, Description, Size, Color, Quantity, Exchange_product, Image
+class Product(models.Model):
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=200, null=False, blank=False)
+    price = models.IntegerField(null=False, blank=False)
+    description = models.CharField(max_length=200, null=False, blank=False)
+    size = models.CharField(null=False, blank=False)
+    color = models.CharField(max_length=200, null=False, blank=False)
+    quantity = models.IntegerField(null=False, blank=False)
+    exchange_product = models.CharField(max_length=200, null=True, blank=True)
+    image = models.ImageField(upload_to='product_images', null=True)
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.CASCADE)
+    
+>>>>>>> Stashed changes
