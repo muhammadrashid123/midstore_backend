@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+<<<<<<< Updated upstream
 # Create your views here.
 """
 All view related to the products management
@@ -58,3 +59,43 @@ class ProductsView(APIView):
         return self.products_controller.delete_product(request)
 
 
+=======
+from rest_framework.views import APIView
+
+from product_management.product_management_controller import CategoryController, ProductController
+
+
+class CategoryView(APIView):
+
+    category_controller_obj = CategoryController()
+
+    def post(self, request):
+        """ Create a Category"""
+
+        return self.category_controller_obj.create_category(request)
+
+class ProductView(APIView):
+    """CRUD View for the Product model"""
+
+    product_controller_obj = ProductController()
+
+    def post(self, request):
+        """Create new User"""
+
+        return self.product_controller_obj.create_product(request)
+
+    def patch(self, request):
+        """Update a User"""
+
+        return self.product_controller_obj.update_product(request)
+
+    def get(self, request):
+        """Get details of a User"""
+
+        return self.product_controller_obj.get_product_details(request)
+
+    def delete(self,request):
+        """Delete existing User"""
+
+        return self.product_controller_obj.delete_product(request)
+>>>>>>> Stashed changes
