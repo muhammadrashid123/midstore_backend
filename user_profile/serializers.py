@@ -6,7 +6,7 @@ Serializers for the user profile app
 
 from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
-from user_profile.models import User
+from user_profile.models import Cart, DeliveryCost, User
 
 
 class UserProfileWriteSerializer(ModelSerializer):
@@ -36,3 +36,13 @@ class UserProfileReadSerializer(ModelSerializer):
         model = User
         fields = "__all__"
 
+class CartSerializer(ModelSerializer):
+    class Meta:
+        model = Cart
+        fields = ['id', 'user', 'item', 'quantity', 'created_at', 'updated_at']
+
+
+class DeliveryCostSerializer(ModelSerializer):
+    class Meta:
+        model = DeliveryCost
+        fields = ['id', 'status', 'cost_per_delivery', 'cost_per_product', 'fixed_cost', 'created_at', 'updated_at']

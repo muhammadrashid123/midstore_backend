@@ -58,10 +58,3 @@ class ProductsView(APIView):
         return self.products_controller.delete_product(request)
 
 
-# class AddToCartView(APIView):
-#     add_to_cart_controller=Add_To_Cart_Management()
-
-#     def post(self,request):
-#         """item add to cart"""
-
-#         return self.add_to_cart_controller.add_to_cart(request)
