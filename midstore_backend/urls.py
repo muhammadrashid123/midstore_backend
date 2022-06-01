@@ -22,6 +22,9 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # authentication app urls
+    path("midstore/authentication/", include("authentication.urls")),
+
     # seller_management app urls
     path("midstore/seller-management/", include("seller_management.urls")),
 

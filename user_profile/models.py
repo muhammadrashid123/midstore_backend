@@ -6,7 +6,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.fields import EmailField
 from product_management.models import Products
 # Create your models here.
-from seller_management.models import Shop
 
 
 class UserStatus(models.Model):
@@ -37,9 +36,10 @@ class User(AbstractUser):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=50, null=True, blank=True)
     email = EmailField(unique=True, null=True)
-    name = models.CharField(max_length=150, null=True, blank=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
 
     address = models.TextField()
+    address_2 = models.TextField(null=True, blank=True)
     contact_number = models.CharField(unique=True, max_length=200, null=False, blank=False)  # required
     gender = models.CharField(max_length=50, null=True, blank=True)
 
@@ -55,7 +55,7 @@ class User(AbstractUser):
         UserStatus, null=True, blank=True, on_delete=models.PROTECT
     )
 
-    shop = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.CASCADE)  # Shop foreign key
+    # shop = models.ForeignKey(Shop, null=True, blank=True, on_delete=models.CASCADE)  # Shop foreign key
     # Forgot password verification code
     forgot_pwd_email_code = models.CharField(max_length=20, null=True, blank=True)
 
