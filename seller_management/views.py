@@ -1,5 +1,5 @@
-
 """
+
 All view related to the seller management
 
 """
@@ -18,6 +18,10 @@ class ShopView(APIView):
         return self.shop_controller_obj.create_shop(request)
 
     def get(self, request):
+        """Get a shop"""
+
+        return self.shop_controller_obj.get_shop(request)
+
         """Get details of a User"""
 
         return self.shop_controller_obj.get_shop_details(request)
