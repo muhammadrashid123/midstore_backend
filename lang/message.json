@@ -96,6 +96,24 @@
             "ar": ""
         }
     },
+    "111": {
+        "msg": {
+            "en": "Invalid Credential",
+            "ar": ""
+        }
+    },
+    "112": {
+        "msg": {
+            "en": "Login successful",
+            "ar": ""
+        }
+    },
+    "113": {
+        "msg": {
+            "en": "Token Invalid or Not Provided",
+            "ar": ""
+        }
+    },
 
     "302": {
         "msg": {
