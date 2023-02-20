@@ -36,6 +36,7 @@ class UserProfileReadSerializer(ModelSerializer):
         model = User
         fields = "__all__"
 
+
 class CartSerializer(ModelSerializer):
     class Meta:
         model = Cart

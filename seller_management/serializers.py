@@ -24,4 +24,3 @@ class ShopReadSerializer(ModelSerializer):
     class Meta:
         model = Seller_Shop
         fields = ('uuid', 'name', 'logo', 'shop_type', 'address', 'description', 'user')
-# commit

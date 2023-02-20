@@ -1,69 +1,35 @@
 """
-<<<<<<< Updated upstream
 Controller class for products management
-
 """
-
-import uuid
-
-from django.http import request
-from product_management.models import Category
-from product_management.serializers import CategoryReadSerializer, CategoryWriteSerializer, \
-    CategoryProductsReadSerializer
-from rest_framework import serializers
-from utils.response_utils import create_message, create_response
-from utils.request_utils import get_query_param_or_default
-from django.db import transaction
-from product_management.serializers import (ProductsWriteSerializer, ProductsReadSerializer)
-from product_management.models import Products
-
 import logging
 import traceback
 
-
-class CategoryController:
-    """Controller class for products category management"""
-
-    def add_category(slef, request):
-        """create an category """
-
-        try:
-            # Get mutable copy of request.data
-=======
-Controller class for the Seller Management app
-
-All business logic related to seller management is contained here
-
-"""
-from unicodedata import category
-from product_management.models import Category, Product
-from product_management.serializers import CategoryWriteSerializer, CategoryReadSerializer
-from utils.response_utils import create_response, create_message
+from product_management.models import Category
+from product_management.serializers import CategoryReadSerializer, CategoryWriteSerializer, \
+    CategoryProductsReadSerializer, ProductsWriteSerializer, ProductsReadSerializer
+from utils.response_utils import create_message, create_response
+from utils.request_utils import get_query_param_or_default
+from django.db import transaction
+from product_management.models import Products
 
 
 class CategoryController:
     """
-    Controller class for the shop
+    Controller class for the Product category
     """
 
     def create_category(self, request):
         """
         Create a category
-
         """
         try:
             # Get a mutable copy of request payload
->>>>>>> Stashed changes
+
             payload = request.data.copy()
 
             # Mandatory keys in the request payload
             mandatory_keys = [
-<<<<<<< Updated upstream
                 "title"
-
-=======
-                "name"
->>>>>>> Stashed changes
             ]
 
             # Check if all mandatory keys exist in the request payload
@@ -71,7 +37,6 @@ class CategoryController:
                 return create_response(create_message(mandatory_keys, 100), 400)
 
             serialized = CategoryWriteSerializer(data=payload)
-<<<<<<< Updated upstream
             if serialized.is_valid():
                 category = serialized.save()
 
@@ -89,20 +54,20 @@ class CategoryController:
             return create_response(create_message([str(exc)], 1002), 500)
 
     def get_category(self, request):
-        """Fetch all products category details """
+        """Fetch all products' category details """
 
         try:
-            payload = request.data.copy()
             # if get single product
             if get_query_param_or_default(request, "uuid", None):
+                # return create_response(create_message([], 110), 400)
                 category = Category.objects.filter(uuid=get_query_param_or_default(request, "uuid", None)).first()
-
+                print("category", category)
                 if not category:
                     return create_response(create_message([], 314), 404)
 
                 serialized = CategoryProductsReadSerializer(category)
-
-                return create_response(create_message(serialized.data, 1000), 200)
+                print("serialized", serialized)
+                return create_response(create_message([serialized.data], 1000), 200)
             else:
                 # if show all  product categories
                 category = Category.objects.all().order_by("created_at")
@@ -124,9 +89,9 @@ class CategoryController:
         try:
             # Get mutable copy of request payload
             payload = request.data.copy()
-            # contact_number is mandatory in query params
+            # uuid is mandatory in query params
             if not get_query_param_or_default(request, "uuid", None):
-                return create_response(create_message([], 105), 400)
+                return create_response(create_message([], 316), 400)
 
             category = Category.objects.filter(uuid=get_query_param_or_default(request, "uuid", None)).first()
             # If category does not exist
@@ -190,6 +155,8 @@ class ProductsController:
                 "title",
                 "image",
                 "price",
+                "stock",
+                "brand_name"
 
             ]
 
@@ -218,8 +185,6 @@ class ProductsController:
         """Fetch all products details"""
 
         try:
-
-            payload = request.data.copy()
 
             # if get single product
             if get_query_param_or_default(request, "uuid", None):
@@ -263,7 +228,7 @@ class ProductsController:
             # If uuid does not exist
             if not product:
                 return create_response(create_message([], 311), 404)
-            # guid cannot be updated
+            # uuid cannot be updated
             payload.pop("uuid", None)
 
             serialized = ProductsWriteSerializer(data=payload, partial=True)
@@ -305,44 +270,3 @@ class ProductsController:
             logging.exception(str(exc))
             traceback.print_exc()
             return create_response(create_message([str(exc)], 1002), 500)
-=======
-
-            if serialized.is_valid():
-
-                category_obj = serialized.save()
-
-            else:  # There were errors while serializing the payload
-                return create_response(create_message([serialized.errors], 102), 400)
-
-            serialized = CategoryReadSerializer(category_obj)
-
-            return create_response(create_message([serialized.data], 103), 201)
-
-        except Exception as ex:
-            print(ex)
-            return create_response(create_message([str(ex)], 1002), 500)
-
-    def get_category(self, request):
-        """Get details of a shop"""
-        try:
-
-            payload=request.data.copy()
-            category = Category.objects.filter(
-                category_name=payload.get("name")
-            ).first()
-
-            if not category:
-                return create_response(create_message([], 302), 404)
-
-            serialized = CategoryReadSerializer(category)
-
-            return create_response(create_message([serialized.data], 1000), 200)
-
-
-        except Exception as ex:
-            print(ex)
-            return create_response(create_message([str(ex)], 1002), 500)
-
-
-
->>>>>>> Stashed changes
