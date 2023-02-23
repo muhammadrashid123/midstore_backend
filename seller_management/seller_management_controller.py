@@ -19,9 +19,9 @@ class ShopController:
     Controller class for the shop
     """
 
-    def create_shop(self, request):
-        """
-        Create a shop
+
+    def create_user(self, request):
+        """Create user with the given request payload
 
         Args:
             request ([WSGIRequest]): [The request made by the client]
