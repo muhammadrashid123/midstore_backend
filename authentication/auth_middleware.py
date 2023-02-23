@@ -4,6 +4,8 @@ After validating the token against User, the user object is added
 to request.user
 
 """
+import logging
+import traceback
 
 from django.core.wsgi import get_wsgi_application
 from django.utils.deprecation import MiddlewareMixin
@@ -87,5 +89,7 @@ class TokenValidationMiddleware(MiddlewareMixin):
 
         except Exception as ex:
             print(ex)
+            logging.exception(str(ex))
+            traceback.print_exc()
             return create_response(create_message([str(ex)], 1002), 500)
 
