@@ -74,7 +74,7 @@ class UserProfileController:
 
         except Exception as ex:
             logging.exception(str(ex))
-            traceback.print_ex()
+            # traceback.print_ex()
             return create_response(create_message([str(ex)], 1002), 500)
 
     def update_user_profile(self, request):

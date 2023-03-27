@@ -16,7 +16,6 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -27,7 +26,6 @@ SECRET_KEY = 'django-insecure-%=!@zqj@_qh@7w=!jzb(=+r7waheg_ny@e0+t_x7y%d6z5l3)3
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -52,7 +50,6 @@ INSTALLED_APPS = [
     "user_profile",
     "common",
 
-
     ###################
     # Second party apps
     # Second party apps
@@ -60,20 +57,22 @@ INSTALLED_APPS = [
     ###################
 
     # Third pary apps
-    'rest_framework'
-    # 'django_filters'
+    'rest_framework',
+    'django_filters',
+    'corsheaders',
 ]
 
 
+REST_FRAMEWORK = {
 
-# REST_FRAMEWORK = {
-
-#     'DEFAULT_FILTER_BACKENDS': [
-#         'django_filters.rest_framework.DjangoFilterBackend',
-#     ],
-# }
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
 
 MIDDLEWARE = [
+    # For Cross Origin Resource Sharing
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,9 +82,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # Token validation middleware
-    "authentication.auth_middleware.TokenValidationMiddleware",
+    # "authentication.auth_middleware.TokenValidationMiddleware",
 ]
-
 
 ROOT_URLCONF = 'midstore_backend.urls'
 
@@ -122,18 +120,17 @@ AUTH_USER_MODEL = "user_profile.User"
 # }
 
 DATABASES = {
-   'default': {
-      'ENGINE': 'django.db.backends.postgresql_psycopg2',
-      'OPTIONS': {"options": "-c search_path=public"},
-      'NAME': 'midstore',
-      'USER': 'admin',
-      'PASSWORD': 'admin',
-      'HOST': 'localhost',
-      'PORT': '5432',
-      'CONN_MAX_AGE': 600,
-   }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'OPTIONS': {"options": "-c search_path=public"},
+        'NAME': 'midstore',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'CONN_MAX_AGE': 600,
+    }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -152,7 +149,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
