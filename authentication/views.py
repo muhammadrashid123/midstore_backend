@@ -19,3 +19,11 @@ class UserAuthView(APIView):
         that they are authenticated users"""
 
         return self.authentication_controller.user_login(request)
+class AuthToken(APIView):
+    """Auth view to generate refresh auth token."""
+    authentication_controller = AuthController()
+    
+    def post(self, request):
+        """ Get refresh token for user."""
+        
+        return self.authentication_controller.refresh_token(request.data.get('key',None))

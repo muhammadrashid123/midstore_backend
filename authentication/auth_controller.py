@@ -8,15 +8,17 @@ import logging
 import traceback
 import uuid
 
+from django.utils import timezone
+from datetime import timedelta
 from django.contrib.auth.hashers import check_password
-
-from authentication.models import Token
+from rest_framework.authtoken.models import Token
 from user_profile.models import User
 from utils.response_utils import create_response, create_message
-
-
+from utils.utils import is_token_expired
+from midstore_backend.settings import get_secret
 class AuthController:
     """Controller for authentication related logic"""
+    
 
     def user_login(self, request):
         """Validate credentials and generate a login token"""
@@ -65,22 +67,24 @@ class AuthController:
             # Search for existing token
             user_token_obj = Token.objects.filter(
                 user=user,
-                is_valid=True
             ).first()
 
             if not user_token_obj:  # Create new token object in case of first user login
                 user_token_obj = Token.objects.create(
-                    token=(str(uuid.uuid4()) + str(uuid.uuid4())).replace("-", ""),
+                    key=(str(uuid.uuid4())).replace("-", ""),
                     user=user
                 )
-            else:
-                # Create new token for user
-                user_token_obj.token = (str(uuid.uuid4()) + str(uuid.uuid4())).replace("-", "")
-                user_token_obj.is_valid = True
-                user_token_obj.save()
+                
+            expired  = is_token_expired(user_token_obj)
+            if expired:
+                user_token_obj.delete()
+                user_token_obj = Token.objects.create(user=user)
+                
+            delta = user_token_obj.created + timedelta(seconds=get_secret("AUTH_TOKEN_EXPIRY_IN_SECONDS"))
 
             response_data = {
-                "Token": user_token_obj.token
+                "Token": user_token_obj.key,
+                "expired_in_seconds":(delta - timezone.now()).total_seconds()
             }
 
             return create_response(create_message([response_data], 112), 200)
@@ -89,3 +93,32 @@ class AuthController:
             logging.exception(str(exc))
             traceback.print_exc()
             return create_response(create_message([str(exc)], 1002), 500)
+
+    def refresh_token(self, key):
+        # Mandatory keys in the request payload
+        mandatory_keys = [
+            "key"
+        ]
+        response_data = {
+            "Refresh Token":"",
+            "expired_in_seconds":""
+        }
+        try:
+            if not key:
+                return create_response(create_message(mandatory_keys, 100), 400)
+            token = Token.objects.get(key=key)
+        except Token.DoesNotExist:
+            return create_response(create_message([], 318), 200)
+
+        if not token.user.is_active:
+           return create_response(create_message([], 319), 200)
+
+        expired = is_token_expired(token)
+        if expired:
+            token.delete()
+            token = Token.objects.create(user=token.user)
+            
+        delta = token.created + timedelta(seconds=get_secret("AUTH_TOKEN_EXPIRY_IN_SECONDS"))
+        response_data['Refresh Token'] = token.__dict__['key']
+        response_data['expired_in_seconds'] = (delta - timezone.now()).total_seconds()
+        return create_response(create_message([response_data], 1000), 200)

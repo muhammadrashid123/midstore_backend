@@ -5,7 +5,7 @@ All view related to the products management
 
 from product_management.product_management_controller import ProductsController, CategoryController
 from rest_framework.views import APIView
-
+from rest_framework.permissions import IsAuthenticated
 
 class CategoryView(APIView):
     """CRUD Api view for the products Category"""
@@ -25,6 +25,7 @@ class CategoryView(APIView):
 
 
 class ProductsView(APIView):
+    permission_classes = [IsAuthenticated]
     """CRUD Api view for the products"""
 
     products_controller = ProductsController()

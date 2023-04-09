@@ -2,7 +2,7 @@
 Models related to the authentication app
 
 """
-
+from datetime import datetime
 from django.db import models
 from user_profile.models import User
 
