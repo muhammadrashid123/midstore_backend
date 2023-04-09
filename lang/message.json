@@ -178,5 +178,17 @@
             "en": "Product id required ",
             "ar": ""
         }
+    },
+    "318": {
+        "msg": {
+            "en": "Token does not exist. ",
+            "ar": ""
+        }
+    },
+    "319": {
+        "msg": {
+            "en": "Eiter user is in-active or deleted.",
+            "ar": ""
+        }
     }
 }
