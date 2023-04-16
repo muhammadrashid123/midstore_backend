@@ -3,6 +3,8 @@ model for product Management
 """
 from django.db import models
 import uuid
+from django.utils.translation import gettext_lazy as _
+
 
 
 class Category(models.Model):

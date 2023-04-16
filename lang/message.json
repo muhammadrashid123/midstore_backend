@@ -190,5 +190,29 @@
             "en": "Eiter user is in-active or deleted.",
             "ar": ""
         }
+    },
+    "320": {
+        "msg": {
+            "en": "Item added to cart successfully",
+            "ar": ""
+        }
+    },
+    "321": {
+        "msg": {
+            "en": "Cart updated successfully",
+            "ar": ""
+        }
+    },
+    "322": {
+        "msg": {
+            "en": "Cart(s) items deleted successfully",
+            "ar": ""
+        }
+    },
+    "323": {
+        "msg": {
+            "en": "ids must be in list form",
+            "ar": ""
+        }
     }
 }
