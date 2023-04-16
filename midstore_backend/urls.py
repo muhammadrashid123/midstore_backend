@@ -32,7 +32,10 @@ urlpatterns = [
     path("midstore/user-profile/", include("user_profile.urls")),
 
     # product_management app urls
-    path("midstore/product-management/", include("product_management.urls"))
+    path("midstore/product-management/", include("product_management.urls")),
+    
+    # card_management app urls
+    path("midstore/cart-management/", include("cart_management.urls"))
 ]
 
 urlpatterns += staticfiles_urlpatterns()

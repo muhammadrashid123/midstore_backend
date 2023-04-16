@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 import yaml
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -67,6 +66,7 @@ INSTALLED_APPS = [
     "product_management",
     "user_profile",
     "common",
+    "cart_management",
 
     ###################
     # Second party apps
@@ -87,11 +87,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-    'rest_framework.authentication.BasicAuthentication',
-    'rest_framework.authentication.TokenAuthentication',
-    ),
     'DEFAULT_TOKEN_MODEL': 'authentication.models',
+    'JSON_ENCODER': 'utils.encoders.CustomJSONEncoder',
 }
 
 MIDDLEWARE = [
