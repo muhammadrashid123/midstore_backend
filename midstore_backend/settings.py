@@ -25,8 +25,9 @@ SECRET_KEY = 'django-insecure-%=!@zqj@_qh@7w=!jzb(=+r7waheg_ny@e0+t_x7y%d6z5l3)3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
 # Application definition
 
 INSTALLED_APPS = [
@@ -163,6 +164,10 @@ USE_TZ = True
 
 # Locale configuration for server response message e.g. en, ar, fr etc
 MSG_LOCALE = "en"
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, ''),)
+# STATICFILES_DIRS = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = BASE_DIR/'staticfiles'
 
 # Media urls
 MEDIA_URL = "/media/"
