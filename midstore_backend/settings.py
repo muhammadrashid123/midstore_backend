@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import yaml
 from pathlib import Path
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +28,23 @@ DEBUG = True
 # ALLOWED_HOSTS = ["*"]
 
 ALLOWED_HOSTS = ['.vercel.app', '.now.sh']
+# get secret varibales:
+try:
+    file_path = os.path.join(BASE_DIR, "secrets.yaml")
+    with open(file_path) as file:
+        secrets = yaml.full_load(file.read())
+except Exception as e:
+    with open(file_path) as file:
+        secrets = yaml.full_load(file.read())
+
+def get_secret(key, secrets=secrets):
+    """Get the secret variables."""
+    for dict_ in secrets:
+        if key in dict_:
+            if isinstance(dict_[key], list):
+                return dict_[key][0]
+            return dict_[key]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,6 +67,7 @@ INSTALLED_APPS = [
     "product_management",
     "user_profile",
     "common",
+    "cart_management",
 
     ###################
     # Second party apps
@@ -61,6 +79,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
+    'rest_framework.authtoken'
 ]
 
 
@@ -69,6 +88,8 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
+    'DEFAULT_TOKEN_MODEL': 'authentication.models',
+    'JSON_ENCODER': 'utils.encoders.CustomJSONEncoder',
 }
 
 MIDDLEWARE = [
@@ -124,11 +145,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'OPTIONS': {"options": "-c search_path=public"},
-        'NAME': 'midstore',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': get_secret('db_name'),
+        'USER': get_secret('db_user'),
+        'PASSWORD': get_secret('db_password'),
+        'HOST': get_secret('db_host'),
+        'PORT': get_secret('db_port'),
         'CONN_MAX_AGE': 600,
     }
 }

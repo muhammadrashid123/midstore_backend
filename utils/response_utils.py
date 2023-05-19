@@ -7,9 +7,11 @@ import json
 
 from django.http import HttpResponse
 from lang.locale_utils import get_message
+from utils.encoders import CustomJSONEncoder
 
 
-def create_message(data, status_code=None):
+
+def create_message(data, status_code=None,message=None,):
     """Create message utility for creating responses
 
     Args:
@@ -26,7 +28,7 @@ def create_message(data, status_code=None):
         # internal system codes
         "status": status_code,
         # locale message in the system codes
-        "message": get_message(status_code),
+        "message": get_message(status_code) if not message else message,
         "data": data,
     }
 
@@ -53,7 +55,7 @@ def create_response(
         raise ValueError("No http status code provided")
 
     resp = HttpResponse(
-        json.dumps(response_body), status=http_status, content_type=mime
+        json.dumps(response_body, cls=CustomJSONEncoder), status=http_status, content_type=mime
     )
 
     for name, value in header_dict.items():
